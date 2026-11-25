@@ -6,6 +6,7 @@ import zio.test.*
 import zio.test.TestAspect.*
 
 import java.nio.file.{Files, Path, Paths}
+import zio.schema.codec.JsonCodec.schemaBasedBinaryCodec
 import scala.jdk.CollectionConverters.*
 
 object McpJamesWardSpec extends ZIOSpecDefault:
@@ -57,6 +58,16 @@ object McpJamesWardSpec extends ZIOSpecDefault:
           entry.uri == uri,
           body.flatMap(_.mimeType) == Chunk("text/markdown"),
           refs.flatMap(_.text) == Chunk(expected),
+        )
+      ,
+      test("GET /health answers 200 with the number of skills"):
+        for
+          skills   <- Skills.load
+          response <- McpJamesWard.routes(skills).runZIO(Request.get(URL.root / "health"))
+          health   <- response.body.to[McpJamesWard.Health]
+        yield assertTrue(
+          response.status.code == 200,
+          health == McpJamesWard.Health("ok", 2),
         )
       ,
       test("a skill that can't be served fails the load"):

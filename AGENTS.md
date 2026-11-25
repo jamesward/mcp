@@ -1,6 +1,6 @@
 # AGENTS.md
 
-James Ward's MCP server ([jamesward/mcp](https://github.com/jamesward/mcp)) at `https://mcp.jamesward.com/`: a ZIO HTTP server, using [zio-http-mcp](https://github.com/jamesward/zio-http-mcp), built as a GraalVM native binary. For now it serves one feature, Skills.
+James Ward's MCP server ([jamesward/mcp](https://github.com/jamesward/mcp)) at `https://mcp.jamesward.com/`: a ZIO HTTP server, using [zio-http-mcp](https://github.com/jamesward/zio-http-mcp), built as a GraalVM native binary. For now it serves one feature, Skills. `GET /health` answers 200 with `{"status":"ok","skills":<count>}`; it is heroku-ops' probe.
 
 - **Skills:** at startup, `SkillsSource.github` reads `skills/` on the `main` branch of [jamesward/skills](https://github.com/jamesward/skills) with [zio-git](https://github.com/jamesward/zio-git). `Skills.load` writes the files to a temporary directory, laid out as `META-INF/skills/jamesward/skills/<name>/`, and `McpSkillsJars` serves them as `skill://jamesward/skills/<name>/SKILL.md`. A skill that can't be served (invalid frontmatter, over the size limits) fails startup; finding no skills is a defect. The skills only change when the server restarts (Heroku restarts dynos about every 24 hours).
 
@@ -57,6 +57,7 @@ Full validation (CI runs the same):
 - `Procfile`: `web: bin/mcp-jamesward -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true`. A native binary ignores `JAVA_TOOL_OPTIONS`, so the JVM defaults buildpack-scala sets for JVM apps are passed as arguments here. The max heap defaults to 80% of the dyno's memory limit.
 - Logs JSON, one object per line, with `request_id` from `X-Request-ID`, through zio-logging's `consoleJsonLogger` and the SLF4J bridge (`AppLogging`).
 - Runtime metrics (`log-runtime-metrics`): not yet enabled.
+- Watched by heroku-ops (FACTORY.md "Watched Heroku apps"): log drain, webhook and a probe of `/health`.
 
 ## Maintenance routine
 
