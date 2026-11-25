@@ -1,0 +1,9 @@
+/.idea/
+/target/
+/project/target/
+/project/project/
+/.bsp/
+/.kiro/skills/
+/.kiro/settings/lsp.json
+/.kiro/agents/
+/local.sbt
