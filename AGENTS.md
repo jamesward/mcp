@@ -56,7 +56,7 @@ Full validation (CI runs the same):
 - Heroku app `mcp-jamesward` serving `mcp.jamesward.com`. Buildpacks, in order: `heroku/jvm` (the JDK for sbt during the build), `https://github.com/jamesward/buildpack-scala`, whose native image mode runs `nativeImage` and ships only the binary, at `bin/mcp-jamesward`.
 - `Procfile`: `web: bin/mcp-jamesward -XX:+ExitOnOutOfMemoryError -Djava.net.preferIPv4Stack=true`. A native binary ignores `JAVA_TOOL_OPTIONS`, so the JVM defaults buildpack-scala sets for JVM apps are passed as arguments here. The max heap defaults to 80% of the dyno's memory limit.
 - Logs JSON, one object per line, with `request_id` from `X-Request-ID`, through zio-logging's `consoleJsonLogger` and the SLF4J bridge (`AppLogging`).
-- Runtime metrics (`log-runtime-metrics`): not yet enabled.
+- Runtime metrics (`log-runtime-metrics`): on.
 - Watched by heroku-ops (FACTORY.md "Watched Heroku apps"): log drain, webhook and a probe of `/health`.
 
 ## Maintenance routine
