@@ -47,7 +47,7 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio-http"                  % "3.12.0",
   "dev.zio" %% "zio-logging"               % "2.5.5",
   "dev.zio" %% "zio-logging-slf4j2-bridge" % "2.5.5",
-  "com.jamesward" %% "zio-http-mcp"        % "0.16.0",
+  "com.jamesward" %% "zio-http-mcp"        % "0.16.1",
   "com.jamesward" %% "zio-git"             % "0.0.3",
 
   "dev.zio" %% "zio-test"     % zioVersion % Test,
